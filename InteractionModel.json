@@ -1,0 +1,55 @@
+{
+  "intents": [
+    { "name": "AMAZON.CancelIntent", "samples": [] },
+    { "name": "AMAZON.HelpIntent", "samples": [] },
+    { "name": "AMAZON.StopIntent", "samples": [] },
+    {
+      "name": "GiveEntryIntent",
+      "samples": [
+        "I have a migraine",
+        "a migraine",
+        "migraine",
+        "log a migraine",
+        "log something",
+        "log one",
+        "record a migraine",
+        "record one",
+        "add a migraine",
+        "add one",
+        "add migraine",
+
+
+      ],
+      "slots": [ { "name": "Entry", "type": "EntryValues" } ]
+    },
+    {
+      "name": "GetAverageDays",
+      "samples": [
+        "how often do I have migraines",
+        "average days",
+        "how often",
+        "how many",
+        "how regularly",
+        
+
+
+      ],
+      "slots": []
+    },
+    {
+      "name": "GetDiaryEntries",
+      "samples": [
+        "play all",
+        "all",
+        "tell me all entries",
+        "read all my entries",
+        "show all",
+        "read all",
+
+
+
+      ],
+      "slots": []
+    }
+  ]
+}
