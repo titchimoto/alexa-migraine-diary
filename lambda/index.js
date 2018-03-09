@@ -1,5 +1,8 @@
 'use strict';
 const Alexa = require('alexa-sdk');
+const AWS = require('aws-sdk');
+
+
 
 //Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
 //Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
@@ -12,23 +15,25 @@ const HELP_REPROMPT = 'Would you like to add a migraine entry?';
 const STOP_MESSAGE = 'Goodbye!';
 
 let diary = []
-let totalEntries = 0;
+console.log(diary)
 let today = new Date();
 
 function addEntry(painNum) {
   let newEntry = [today, painNum]
   diary.push(newEntry)
-	totalEntries++;
 }
+
+
 
 function getAverageDaysBetweenMigraines(today, firstDate) {
   let days = (today.getTime() - firstDate.getTime())/(1000*3600*24);
-  return Math.round(days / totalEntries);
+  return Math.round(days / diary.length);
 }
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
     alexa.appId = APP_ID;
+    alexa.dynamoDBTableName = 'MigraineDiaryUserData'; // That's it!
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
@@ -43,13 +48,15 @@ const handlers = {
       let filledSlots = delegateSlotCollection.call(this);
       let painLevel = this.event.request.intent.slots.painLevel.value;
       addEntry(painLevel);
-    	this.response.speak("Thanks for sharing. Your migraine has been logged. You now have " + totalEntries + " migraine entries added to your diary. Feel better!");
+      this.attributes['diary'] = diary
+
+    	this.response.speak("Thanks for sharing. Your migraine has been logged. You now have " + this.attributes['diary'].length + " migraine entries added to your diary. Feel better!");
       this.emit(':responseReady');
     },
 
     'GetAverageDays': function() {
       let averageDays = getAverageDaysBetweenMigraines(today, diary[0][0]);
-    	let output = "You have had " + totalEntries +  " migraines since " + diary[0][0].toDateString() +
+    	let output = "You have had " + diary.length +  " migraines since " + diary[0][0].toDateString() +
       ". That is an average of one migraine every " + averageDays + " days."
     	this.response.speak(output);
     	this.emit(':responseReady');

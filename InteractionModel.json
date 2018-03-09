@@ -1,55 +1,109 @@
 {
-  "intents": [
-    { "name": "AMAZON.CancelIntent", "samples": [] },
-    { "name": "AMAZON.HelpIntent", "samples": [] },
-    { "name": "AMAZON.StopIntent", "samples": [] },
+  "languageModel": {
+    "intents": [
+      {
+        "name": "AMAZON.CancelIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": []
+      },
+      {
+        "name": "GetAverageDays",
+        "samples": [
+          "how often do I have migraines",
+          "average days",
+          "how often",
+          "how many",
+          "how regularly",
+          "how frequently",
+          "how often do I get migraines"
+        ],
+        "slots": []
+      },
+      {
+        "name": "GetDiaryEntries",
+        "samples": [
+          "play all",
+          "all",
+          "tell me all entries",
+          "read all my entries",
+          "show all",
+          "read all",
+          "hear all",
+          "list al",
+          "all entries thus far",
+          "all entries so far"
+        ],
+        "slots": []
+      },
+      {
+        "name": "GiveEntryIntent",
+        "samples": [
+          "I have a migraine",
+          "migraine",
+          "I'm in pain",
+          "I have a migraine that feels like a {painLevel}",
+          "add an entry",
+          "add migraine",
+          "add entry"
+        ],
+        "slots": [
+          {
+            "name": "painLevel",
+            "type": "AMAZON.NUMBER",
+            "samples": [
+              "{painLevel}",
+              "it's a {painLevel}"
+            ]
+          }
+        ]
+      }
+    ],
+    "invocationName": "migraine diary"
+  },
+  "prompts": [
     {
-      "name": "GiveEntryIntent",
-      "samples": [
-        "I have a migraine",
-        "a migraine",
-        "migraine",
-        "log a migraine",
-        "log something",
-        "log one",
-        "record a migraine",
-        "record one",
-        "add a migraine",
-        "add one",
-        "add migraine",
-
-
-      ],
-      "slots": [ { "name": "Entry", "type": "EntryValues" } ]
-    },
-    {
-      "name": "GetAverageDays",
-      "samples": [
-        "how often do I have migraines",
-        "average days",
-        "how often",
-        "how many",
-        "how regularly",
-        
-
-
-      ],
-      "slots": []
-    },
-    {
-      "name": "GetDiaryEntries",
-      "samples": [
-        "play all",
-        "all",
-        "tell me all entries",
-        "read all my entries",
-        "show all",
-        "read all",
-
-
-
-      ],
-      "slots": []
+      "id": "Elicit.Intent-GiveEntryIntent.IntentSlot-painLevel",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "How painful is it on a scale of one to ten?"
+        },
+        {
+          "type": "PlainText",
+          "value": "As a number how painful is it?"
+        },
+        {
+          "type": "PlainText",
+          "value": "On a scale of one to ten, what is the pain level?"
+        }
+      ]
     }
-  ]
+  ],
+  "dialog": {
+    "intents": [
+      {
+        "name": "GiveEntryIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "painLevel",
+            "type": "AMAZON.NUMBER",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicitation": "Elicit.Intent-GiveEntryIntent.IntentSlot-painLevel"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
